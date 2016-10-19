@@ -7,6 +7,11 @@ if [ "$HWTYPE" = "container" ] || [ "$HWTYPE" = "lxc" ]; then
 	exit 1
 fi
 
+if [ "$OSTYPE" = "netbsd" ]; then
+	echo "skipping smart monitoring configuration (unsupported system)"
+	exit 1
+fi
+
 /opt/farm/scripts/setup/role.sh sf-monitoring-newrelic
 
 if [ ! -s /etc/local/.config/newrelic.license ]; then
