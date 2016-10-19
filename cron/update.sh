@@ -20,6 +20,10 @@ add_metric() {
 	fi
 }
 
+
+exec 9>/var/run/smart.lock
+if ! flock -n 9; then exit 0; fi
+
 if [ "$1" != "--force" ]; then
 	disks=`ls /dev/disk/by-id/ata-* |grep -v -- -part |grep -v VBOX_HARDDISK |grep -v VMware |grep -v CF_CARD |grep -v DVD |grep -vxFf /opt/farm/ext/standby-monitor/config/devices.conf`
 else
@@ -57,7 +61,7 @@ for disk in $disks; do
 		metrics=`add_metric $file "$metrics" UDMA_CRC_Error_Count    "Component/serverFarmer/smart/critical/udmaCrcErrors[Value]"`
 
 		if [ "$metrics" != "" ]; then
-			curl -s -o /dev/null https://platform-api.newrelic.com/platform/v1/metrics \
+			curl -s -o /dev/null --connect-timeout 2 https://platform-api.newrelic.com/platform/v1/metrics \
 				-H "X-License-Key: $license" \
 				-H "Content-Type: application/json" \
 				-H "Accept: application/json" \
