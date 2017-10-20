@@ -12,7 +12,7 @@ if [ "$OSTYPE" = "netbsd" ]; then
 	exit 1
 fi
 
-/opt/farm/scripts/setup/role.sh sf-monitoring-newrelic
+/opt/farm/scripts/setup/extension.sh sf-monitoring-newrelic
 
 if [ ! -s /etc/local/.config/newrelic.license ]; then
 	echo "skipping smart monitoring configuration (no license key configured)"
