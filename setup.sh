@@ -12,14 +12,14 @@ if [ "$OSTYPE" = "netbsd" ]; then
 	exit 1
 fi
 
-/opt/farm/scripts/setup/extension.sh sf-monitoring-newrelic
-
-if [ ! -s /etc/local/.config/newrelic.license ]; then
-	echo "skipping smart monitoring configuration (no license key configured)"
-	exit 0
-fi
-
 /opt/farm/scripts/setup/extension.sh sf-standby-monitor
+
+if [ ! -f /etc/local/.config/allowed.smart ]; then
+	echo "# example entries:
+# ST4000DM000-1F2168_W300XXXX:UDMA_CRC_Error_Count:3
+# WDC_WD121KRYZ-01W0RB0_XXXXXXXX:Temperature_Celsius:50
+" >/etc/local/.config/allowed.smart
+fi
 
 mkdir -p /var/cache/cacti
 
