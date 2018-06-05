@@ -12,19 +12,14 @@ if [ "$OSTYPE" = "netbsd" ]; then
 	exit 1
 fi
 
-/opt/farm/scripts/setup/extension.sh sf-standby-monitor
+/opt/farm/scripts/setup/extension.sh sf-cache-utils
+/opt/farm/scripts/setup/extension.sh sf-hardware-utils
 
 if [ ! -f /etc/local/.config/allowed.smart ]; then
 	echo "# example entries:
 # ST4000DM000-1F2168_W300XXXX:UDMA_CRC_Error_Count:3
 # WDC_WD121KRYZ-01W0RB0_XXXXXXXX:Temperature_Celsius:50
 " >/etc/local/.config/allowed.smart
-fi
-
-mkdir -p /var/cache/cacti
-
-if ! grep -q /var/cache/cacti /etc/fstab && [ "$HWTYPE" = "physical" ]; then
-	echo "tmpfs /var/cache/cacti tmpfs noatime,size=16m 0 0" >>/etc/fstab
 fi
 
 if ! grep -q /opt/farm/ext/monitoring-smart/cron/update.sh /etc/crontab; then
