@@ -13,7 +13,7 @@ if [ "$OSTYPE" = "netbsd" ]; then
 fi
 
 /opt/farm/scripts/setup/extension.sh sf-cache-utils
-/opt/farm/scripts/setup/extension.sh sf-hardware-utils
+/opt/farm/scripts/setup/extension.sh sf-storage-utils
 
 if [ ! -f /etc/local/.config/allowed.smart ]; then
 	echo "# example entries:

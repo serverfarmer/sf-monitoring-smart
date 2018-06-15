@@ -7,7 +7,7 @@ exec 9>/var/run/smart.lock
 if ! flock -n 9; then exit 0; fi
 
 path="/var/cache/cacti"
-devices=`/opt/farm/ext/hardware-utils/storage/list-physical-drives.sh |grep -vxFf /etc/local/.config/skip-smart.devices`
+devices=`/opt/farm/ext/storage-utils/list-physical-drives.sh |grep -vxFf /etc/local/.config/skip-smart.devices`
 
 for device in $devices; do
 	base="`basename $device`"
