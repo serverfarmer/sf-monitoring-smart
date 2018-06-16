@@ -1,15 +1,12 @@
 #!/bin/bash
 . /opt/farm/scripts/init
 
-
-if [ "$HWTYPE" = "container" ] || [ "$HWTYPE" = "lxc" ]; then
-	echo "skipping smart monitoring configuration (containers do not have access to physical drives)"
-	exit 1
-fi
-
-if [ "$OSTYPE" = "netbsd" ]; then
+if [ "`uname`" != "Linux" ] || [ "$OSTYPE" = "qnap" ]; then
 	echo "skipping smart monitoring configuration (unsupported system)"
-	exit 1
+	exit 0
+elif [ "$HWTYPE" = "container" ] || [ "$HWTYPE" = "lxc" ]; then
+	echo "skipping smart monitoring configuration (containers do not have access to physical drives)"
+	exit 0
 fi
 
 /opt/farm/scripts/setup/extension.sh sf-cache-utils
