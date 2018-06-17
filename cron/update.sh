@@ -20,17 +20,6 @@ for device in $devices; do
 		cat $file.new |mail -s "URGENT: device $deviceid failed SMART data collection" smart-alerts@`external_domain`
 	else
 		mv -f $file.new $file 2>/dev/null
-
-		if [ -s /etc/local/.config/newrelic.license ]; then
-			/opt/farm/ext/monitoring-smart/targets/newrelic.sh $deviceid $file
-		fi
-
-		if [ -d /opt/farm/ext/monitoring-heartbeat ]; then
-			/opt/farm/ext/monitoring-smart/targets/heartbeat.sh $deviceid $file
-		fi
-
-		if [ -d /opt/farm/ext/monitoring-cacti ]; then
-			/opt/farm/ext/monitoring-cacti/cron/send.sh $file
-		fi
+		/opt/farm/ext/monitoring-smart/targets/sata.sh $deviceid $file
 	fi
 done
