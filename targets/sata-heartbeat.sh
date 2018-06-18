@@ -12,7 +12,7 @@ reasons=""
 lookup_smart_attribute() {
 	name=$1
 	reference=$2
-	value="`grep $name $file |awk \"{ print \\\$10 }\"`"
+	value="`grep $name $file |awk \"{ print \\\$10 }\" |cut -dh -f1`"
 
 	if [ "$value" != "" ] && [ $value -gt $reference ]; then
 		increase=`grep ^$deviceid: /etc/local/.config/allowed.smart |grep :$name: |cut -d: -f3 |sed 's/[^0-9]*//g'`

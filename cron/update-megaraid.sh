@@ -6,7 +6,8 @@
 # crontab, eg.:
 #
 # /opt/farm/ext/monitoring-smart/handlers/megaraid.sh megaraid,0 /dev/sda
-
+#
+# (note the /dev/sda or other existing device instead of /dev/bus/0)
 
 exec 9>/var/run/smart-megaraid.lock
 if ! flock -n 9; then exit 0; fi
