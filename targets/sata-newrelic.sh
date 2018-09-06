@@ -10,7 +10,7 @@ add_metric() {
 	previous=$2
 	pattern=$3
 	metric=$4
-	value=`grep $pattern $file |awk "{ print \\$10 }" |cut -dh -f1`
+	value=`grep $pattern $file |head -n1 |awk '{ print $10 }' |cut -dh -f1`
 	if [ "$value" != "" ] && [ "$previous" != "" ]; then
 		echo "$previous, \"$metric\": $value"
 	elif [ "$value" != "" ]; then
