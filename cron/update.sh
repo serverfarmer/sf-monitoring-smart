@@ -23,3 +23,19 @@ for device in $devices; do
 		/opt/farm/ext/monitoring-smart/targets/sata.sh $deviceid $file
 	fi
 done
+
+
+raid=`cat /etc/local/.config/raid.drives |grep -vFf /etc/local/.config/skip-smart.raid`
+
+for entry in $raid; do
+	type=$(echo $entry |cut -d: -f1)
+	node=$(echo $entry |cut -d: -f2)
+	handle=$(echo $entry |cut -d: -f3)
+	device=$(echo $entry |cut -d: -f4)
+
+	file="$path/$device.txt"
+	/usr/sbin/smartctl -d $handle -a $node >$file.new
+	mv -f $file.new $file 2>/dev/null
+
+	/opt/farm/ext/monitoring-smart/targets/$type.sh ${device:4} $file
+done
