@@ -1,21 +1,37 @@
 #!/bin/sh
 
-file=`mktemp -u /var/cache/cacti/raid.XXXXXXXXX.tmp`
-handles=`/opt/farm/ext/storage-utils/list-megaraid-drives.sh`
-node=/dev/bus/0
+scan_drive() {
+	file=$1
+	type=$2
+	device=$3
 
-for handle in $handles; do
-	/usr/sbin/smartctl -d $handle -i $node >$file
+	/usr/sbin/smartctl -d $type -i $device >$file
 
 	if grep -q " SAS" $file; then
 		model=`grep 'Product:' $file |awk '{ print $2 $3 $4 $5 $6 $7 $8 $9 }'`
 		serial=`grep 'Serial number:' $file |awk '{ print $3 }'`
-		echo sas:$node:$handle:sas-${model}_${serial}
+		echo sas:$device:$type:sas-${model}_${serial}
 	else
 		model=`grep 'Device Model:' $file |awk '{ print $3 $4 $5 $6 $7 $8 $9 }'`
 		serial=`grep 'Serial Number:' $file |awk '{ print $3 }'`
-		echo sata:$node:$handle:ata-${model}_${serial}
+		echo sata:$device:$type:ata-${model}_${serial}
 	fi
+}
+
+
+file=`mktemp -u /var/cache/cacti/raid.XXXXXXXXX.tmp`
+handles=`/opt/farm/ext/storage-utils/list-megaraid-drives.sh`
+
+for handle in $handles; do
+	scan_drive $file $handle /dev/bus/0
+done
+
+drives=`/opt/farm/ext/storage-utils/list-scsi-generic-drives.sh`
+
+for drive in $drives; do
+	type=$(echo $drive |cut -d: -f1)
+	device=$(echo $drive |cut -d: -f2)
+	scan_drive $file $type $device
 done
 
 rm -f $file
