@@ -31,11 +31,18 @@ lookup_sas_attribute() {
 
 lookup_sas_attribute "Elements in grown defect list:" 6 reallocated-sectors 4
 lookup_sas_attribute "Non-medium error count:"        4 non-medium-errors   10
-lookup_sas_attribute "^read:"                         3 read-errors         6
-lookup_sas_attribute "^write:"                        2 fast-write-errors   0
-lookup_sas_attribute "^write:"                        3 write-errors        2
-lookup_sas_attribute "^verify:"                       3 verify-errors       2
 lookup_sas_attribute "number of hours powered up"     7 power-on-hours      70000
+
+if grep -q "IBM-ESXS" $file; then
+	lookup_sas_attribute "^read:"                     2 read-errors         6
+	lookup_sas_attribute "^write:"                    2 write-errors        2
+	lookup_sas_attribute "^verify:"                   2 verify-errors       2
+else
+	lookup_sas_attribute "^read:"                     3 read-errors         6
+	lookup_sas_attribute "^write:"                    2 fast-write-errors   0
+	lookup_sas_attribute "^write:"                    3 write-errors        2
+	lookup_sas_attribute "^verify:"                   3 verify-errors       2
+fi
 
 if [ "$reasons" != "" ]; then
 	logger -p cron.notice -t smart "aborting heartbeat for SAS drive $deviceid: ${reasons:2}"
