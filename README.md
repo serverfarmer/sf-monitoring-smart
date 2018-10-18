@@ -1,2 +1,1 @@
-sf-monitoring-smart extension provides easy hard drive physical state
-monitoring using SMART data.
+This extension has been rewritten as Heartbeat subproject. See https://github.com/serverfarmer/heartbeat-linux for details.
