@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo "skipping setup (deprecated extension)"
+/opt/farm/scripts/setup/extension.sh sf-monitoring-heartbeat
